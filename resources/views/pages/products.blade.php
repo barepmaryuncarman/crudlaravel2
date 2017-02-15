@@ -35,6 +35,41 @@ Username
 	<div class="row">
 		<div class="col-xs-12">
 			<div class="box box-primary">
+
+				<!--start form productline-->
+					<div class="modal fade" id="mymodalproductline" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					  <div class="modal-dialog">
+					    <div class="modal-content">
+						      <div class="modal-header">
+						        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						        <h4 class="modal-title" id="myModalLabel">Product Line</h4>
+						      </div>
+						      <div class="modal-body">
+					                <div class="form-group">
+					                  <img class="img-circle center-block" src="" id="add_showImage" data-id="">
+					                </div>
+					                <div class="form-group">
+					                  <label>Image</label>
+					                  <input type="text" class="form-control" name="add_image" placeholder="Image Url">
+					                </div>
+									<div class="form-group">
+					                  <label>Text Description</label>
+					                  <textarea class="form-control" rows="5" name="add_textDescription" placeholder="Product Description" ></textarea>
+					                </div>
+									<div class="form-group">
+					                  <label>HTML Description</label>
+					                  <textarea class="form-control" rows="5" name="add_htmlDescription" placeholder="Product Description" ></textarea>
+					                </div>
+						      </div>
+						      <div class="modal-footer">
+							      <button type="submit" class="btn btn-success" data-dismiss="modal" id="add_productline_action">Save</button><button type="submit" class="btn btn-warning" data-dismiss="modal" id="edit_productline_action">Edit</button><button type="submit" class="btn btn-danger" data-dismiss="modal" id="delete_productline_action">Delete</button>
+							      <button type="button" class="btn btn-default" data-dismiss="modal">Cancle</button>
+						      </div>
+					    </div>
+					  </div>
+					</div>
+				<!--end form tambah data-->
+
 				<!--start form tambah data-->
 					<div class="modal fade" id="mymodaladd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 					  <div class="modal-dialog">
@@ -215,7 +250,7 @@ Username
 		      "scrollX": "140%",
 			  "rowCallback": function( row, data, index ) {
 			  	$('td:eq(0)', row).text(data[0]+1);
-				$('td:eq(8)', row).html("<button class=\"btn btn-sm btn-default\"  data-toggle=\"modal\" data-target=\"#mymodalshow\"  onclick='handleClickAddProductLines("+data[8]+");'><i class=\"fa fa-cubes\"></i>&nbsp;Product Lines</button>&nbsp;&nbsp;<button class=\"btn btn-sm btn-success\"  data-toggle=\"modal\" data-target=\"#mymodalshow\"  onclick='handleClickView("+data[8]+");'><i class=\"fa fa-eye\"></i>&nbsp;View</button>&nbsp;&nbsp;<button class=\"btn btn-sm btn-warning\" data-toggle=\"modal\" data-target=\"#mymodalupdate\" onclick='handleClickUpdate("+data[8]+");'><i class=\"fa fa-edit\"></i>&nbsp;Edit</button>&nbsp;&nbsp;<button class=\"btn btn-sm btn-danger\"  onclick='handleClickDelete("+data[8]+");'><i class=\"fa fa-trash\"></i>&nbsp;Delete</button>");
+				$('td:eq(8)', row).html("<button class=\"btn btn-sm btn-default\"  data-toggle=\"modal\" data-target=\"#mymodalproductline\"  onclick='handleClickAddProductLines("+data[8]+");'><i class=\"fa fa-cubes\"></i>&nbsp;Product Lines</button>&nbsp;&nbsp;<button class=\"btn btn-sm btn-success\"  data-toggle=\"modal\" data-target=\"#mymodalshow\"  onclick='handleClickView("+data[8]+");'><i class=\"fa fa-eye\"></i>&nbsp;View</button>&nbsp;&nbsp;<button class=\"btn btn-sm btn-warning\" data-toggle=\"modal\" data-target=\"#mymodalupdate\" onclick='handleClickUpdate("+data[8]+");'><i class=\"fa fa-edit\"></i>&nbsp;Edit</button>&nbsp;&nbsp;<button class=\"btn btn-sm btn-danger\"  onclick='handleClickDelete("+data[8]+");'><i class=\"fa fa-trash\"></i>&nbsp;Delete</button>");
 			  },
 			  "columnDefs": [
     				{ "width": "2%", sClass: "dt-head-center dt-body-center", "targets": 0 },
@@ -229,6 +264,42 @@ Username
     				{ "width": "35%", sClass: "dt-head-center dt-body-center", "targets": 8 }
   				]
 			});
+
+	function handleClickAddProductLines(id){
+		$.ajax({
+			url:"/product-lines/select/"+id,
+			dataType: "json",
+			type:"POST",
+	        contentType: false,
+	        processData: false,
+			data: function() {
+		        var data = new FormData();
+		        data.append("_method",'put');
+		        data.append("_token","{{csrf_token()}}");
+		        return data;
+	        }(),
+	        success:function(data){
+	        	if(data.productline!=null){
+		        	$('#add_showImage').attr('src', data.productline.image);
+		        	$('#add_showImage').data('id',data.productCode);
+		        	$('input[name="add_image"]').val(data.productline.image);
+		        	$('textarea[name="add_textDescription"]').val(data.productline.textDescription);
+		        	$('textarea[name="add_htmlDescription"]').val(data.productline.htmlDescription);
+		        	$('#add_productline_action').hide();
+		        	$('#edit_productline_action').show();
+		        	$('#delete_productline_action').show();
+	        	}else{
+		        	$('#add_showImage').attr('src', "");
+		        	$('input[name="add_image"]').val("");
+		        	$('textarea[name="add_textDescription"]').val("");
+		        	$('textarea[name="add_htmlDescription"]').val("");
+		        	$('#add_productline_action').show();
+		        	$('#edit_productline_action').hide();
+		        	$('#delete_productline_action').hide();
+	        	}
+			}
+		})
+	}
 
 	//fungsi ajax tampilkan data pada form detail
 	function handleClickView(id){
@@ -287,7 +358,7 @@ Username
 	function handleClickDelete(id){
 	  	swal({
 			title: "Are you sure?",
-			text: "This data will temporary delete!",
+			text: "This data will be temporary delete!",
 			type: "warning",
 			showCancelButton: true,
 			confirmButtonColor: "#DD6B55",
@@ -381,6 +452,119 @@ Username
 	  		//isi datatables
   			refresh_tabel();
 		});
+
+		//aksi untuk tambah data product line
+	  	$("#add_productline_action").click(function(){
+	  		var image = $("input[name=\"add_image\"]").val();
+	  		var textDescription = $("textarea[name=\"add_textDescription\"]").val();
+	  		var htmlDescription = $("textarea[name=\"add_htmlDescription\"]").val();
+		    var productCode = $('#add_showImage').data('id');
+			$.ajax({
+				url:"/product-lines/store",
+				type:"POST",
+		        contentType: false,
+		        processData: false,
+				data: function() {
+			        var data = new FormData();
+			        data.append("_token","{{csrf_token()}}");
+			        data.append("image", image);
+			        data.append("textDescription", textDescription);
+			        data.append("htmlDescription", htmlDescription);
+			        data.append("productCode", productCode);
+			        return data;
+		        }(),
+		        success:function(data){
+		        	console.log(data);
+		        	refresh_tabel();
+    				swal("Yeay", "Success add new data!", "success");
+				},
+				error:function(data){
+    				swal("Ooops", "Failed add new data", "error");
+				}
+			})
+		});
+
+		//aksi untuk ubah data product line
+	  	$("#edit_productline_action").click(function(){
+	  		var image = $("input[name=\"add_image\"]").val();
+	  		var textDescription = $("textarea[name=\"add_textDescription\"]").val();
+	  		var htmlDescription = $("textarea[name=\"add_htmlDescription\"]").val();
+		    var productCode = $('#add_showImage').data('id');
+			$.ajax({
+				url:"/product-lines/update/"+productCode,
+				type:"POST",
+		        contentType: false,
+		        processData: false,
+				data: function() {
+			        var data = new FormData();
+			        data.append("_token","{{csrf_token()}}");
+			        data.append("image", image);
+			        data.append("textDescription", textDescription);
+			        data.append("htmlDescription", htmlDescription);
+			        return data;
+		        }(),
+		        success:function(data){
+		        	console.log(data);
+		        	refresh_tabel();
+    				swal("Yeay", "Success update data!", "success");
+				},
+				error:function(data){
+    				swal("Ooops", "Failed update data", "error");
+				}
+			})
+		});		
+
+		//aksi untuk ubah data product line
+	  	$("#delete_productline_action").click(function(){
+		    var id = $('#add_showImage').data('id');
+		  	swal({
+				title: "Are you sure?",
+				text: "This product line data will be deleted!",
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Yes, Delete!",
+				cancelButtonText: "Cancle",
+				closeOnConfirm: false,
+				closeOnCancel: false,
+				showLoaderOnConfirm: true
+			},
+			function(isConfirm){
+					if (isConfirm) {
+				        $.ajax({
+							url:"/product-lines/destroy/"+id,
+							type:"POST",
+					        contentType: false,
+					        processData: false,
+							data: function() {
+						        var data = new FormData();
+						        data.append("_method",'delete');
+						        data.append("_token","{{csrf_token()}}");
+						        return data;
+					        }(),
+						    success:function(data){
+						    	console.log(data);
+	                            setTimeout(function(){
+	                                swal({
+	                                    title: "Success",
+	                                    text: "Data successfully deleted!",
+	                                    type: "success"
+	                                }, function(){
+											refresh_tabel();
+	                                });
+	                            }, 1000);
+							},
+			                error: function (xhr, ajaxOptions, thrownError) {
+			                    setTimeout(function(){
+			                        swal("Error!", "Please check your connection and try again.", "error");
+			                        }, 1000);
+			                }
+						});
+					} else {
+	    				swal("Cancle", "Data undeleted :)", "error");
+					}
+			});
+		});		
 
 		//aksi untuk tambah data
 	  	$("#add_action").click(function(){

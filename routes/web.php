@@ -14,6 +14,7 @@ Route::get('/', function () {
     returnredirect('/products/');
 });
 
+//route products
 Route::group(['prefix'=>'products'],function(){
 
 	Route::get('/',function () {
@@ -43,7 +44,26 @@ Route::group(['prefix'=>'products'],function(){
 	Route::delete('/destroy/{id}',function ($id) {
 		return "Hapus data id: ".$id;
 	});
+});
 
+//route product-lines
+Route::group(['prefix'=>'product-lines'],function(){
+	
+	Route::post('/store',function (Request $req) {
+		return "Data : ".json_encode($req->all());
+	});
+	
+	Route::put('/select/{id}',function ($id) {
+		return App\product::with('productline')->find($id)->toJson();
+	});
+	
+	Route::post('/update/{id}',function (Request $req,$id) {
+		return "Id productCode: ".$id." Data :".json_encode($req->all());
+	});
+	
+	Route::delete('/destroy/{id}',function ($id) {
+		return "Hapus data id productCode: ".$id;
+	});
 });
 
 Route::group(['prefix'=>'employees'],function(){

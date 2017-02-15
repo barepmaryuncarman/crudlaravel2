@@ -16,7 +16,7 @@ class CreateProductlinesTable extends Migration
         Schema::create('productlines', function (Blueprint $table) {
             $table->increments('productLine');
             $table->string('textDescription');
-            $table->string('htmlDescription');
+            $table->text('htmlDescription');
             $table->string('image');
             $table->timestamps();
         });
