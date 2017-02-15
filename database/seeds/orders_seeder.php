@@ -14,18 +14,20 @@ class orders_seeder extends Seeder
      */
     public function run()
     {
-        $faker = Factory::create();
+        $fake = Factory::create();
         $limit = 10;
         $data = customer::get()->pluck('customerNumber')->toArray();
         for($i = 1; $i <= $limit; $i++){
             $order = new order;
-            $order->orderDate = $faker->dateTime();
-            $order->requiredDate = $faker->dateTime();
-            $order->shippedDate = $faker->dateTime();
+            $order->orderDate = $fake->dateTime();
+            $order->requiredDate = $fake->dateTime();
+            $order->shippedDate = $fake->dateTime();
             //0 = batal, 1 = dipesan/pending, 2 = dikirim/dalam pengiriman, 3 = done/transaksi selesai
-            $order->status = $faker->randomElement($array = [0, 1, 2, 3]);
-            $order->comments = $faker->text($maxNbChars = 100);
-            $order->customerNumber = $faker->randomElement($data);
+            $order->status = $fake->randomElement($array = [0, 1, 2, 3]);
+            $order->comments = $fake->text($maxNbChars = 100);
+            $order->customerNumber = $fake->randomElement($data);
+            $order->created_at = $fake->date($format = 'Y-m-d', $max = 'now');
+            $order->updated_at = $fake->date($format = 'Y-m-d', $max = 'now');
             $order->save();
         }
     }

@@ -22,7 +22,7 @@ class customers_seeder extends Seeder
             $customer->customerName = $fake->name;
             $customer->contactLastName = $fake->firstName;
             $customer->contactFirstName = $fake->lastName;
-            $customer->phone = $fake->phoneNumber;
+            $customer->phone = $fake->e164PhoneNumber;
             $customer->addressLine1 = $fake->streetAddress;
             $customer->addressLine2 = $fake->secondaryAddress;
             $customer->city = $fake->city;

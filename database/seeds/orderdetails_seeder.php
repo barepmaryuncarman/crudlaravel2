@@ -15,17 +15,19 @@ class orderdetails_seeder extends Seeder
      */
     public function run()
     {
-        $faker = Factory::create();
+        $fake = Factory::create();
         $limit = 50;
         $order = order::get()->pluck('orderNumber')->toArray();
         $customer = customer::get()->pluck('customerNumber')->toArray();
         for($i = 1; $i <= $limit; $i++){
             $orderdetail = new orderdetail;
-            $orderdetail->orderNumber = $faker->randomElement($order);
-            $orderdetail->productCode = $faker->randomElement($customer);
-            $orderdetail->quantityordered = $faker->randomNumber(2);
-            $orderdetail->priceEach = $faker->randomNumber(5);
-            $orderdetail->orderLineNumber = $faker->randomNumber(9);
+            $orderdetail->orderNumber = $fake->randomElement($order);
+            $orderdetail->productCode = $fake->randomElement($customer);
+            $orderdetail->quantityordered = $fake->randomNumber(2);
+            $orderdetail->priceEach = $fake->randomNumber(5);
+            $orderdetail->orderLineNumber = $fake->randomNumber(9);
+            $orderdetail->created_at = $fake->date($format = 'Y-m-d', $max = 'now');
+            $orderdetail->updated_at = $fake->date($format = 'Y-m-d', $max = 'now');
             $orderdetail->save();
         }
     }

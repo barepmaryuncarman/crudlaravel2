@@ -14,7 +14,7 @@ class payments_seeder extends Seeder
      */
     public function run()
     {
-        $faker = Factory::create();
+        $fake = Factory::create();
         $limit = 10;
         $data = customer::get()->pluck('customerNumber')->toArray();
         for($i = 1; $i <= $limit; $i++){
@@ -22,9 +22,11 @@ class payments_seeder extends Seeder
             //customerNumber dikasih unique(),
             //soalnya di foto tabel relasinya [customers 1:1 payments]
             //gajelas payment apaan
-            $payment->customerNumber = $faker->unique()->randomElement($data);
-            $payment->paymentDate = $faker->dateTime();
-            $payment->amount = $faker->randomNumber(6);
+            $payment->customerNumber = $fake->unique()->randomElement($data);
+            $payment->paymentDate = $fake->dateTime();
+            $payment->amount = $fake->randomNumber(6);
+            $payment->created_at = $fake->date($format = 'Y-m-d', $max = 'now');
+            $payment->updated_at = $fake->date($format = 'Y-m-d', $max = 'now');
             $payment->save();
         }
     }

@@ -13,18 +13,20 @@ class offices_seeder extends Seeder
      */
     public function run()
     {
-        $faker = Factory::create();
+        $fake = Factory::create();
         $limit = 10;
         for($i = 1; $i <= $limit; $i++){
             $office = new office;
-            $office->city = $faker->city;
-            $office->phone = $faker->e164PhoneNumber;
-            $office->addressLine1 = $faker->streetAddress;
-            $office->addressLine2 = $faker->secondaryAddress;
-            $office->state = $faker->state;
-            $office->country = $faker->country;
-            $office->postalCode = $faker->postcode;
-            $office->territory = $faker->randomElement($array = ['Asia', 'Europe', 'North America', 'South America', 'Australia', 'Africa']);
+            $office->city = $fake->city;
+            $office->phone = $fake->e164PhoneNumber;
+            $office->addressLine1 = $fake->streetAddress;
+            $office->addressLine2 = $fake->secondaryAddress;
+            $office->state = $fake->state;
+            $office->country = $fake->country;
+            $office->postalCode = $fake->postcode;
+            $office->territory = $fake->randomElement($array = ['Asia', 'Europe', 'North America', 'South America', 'Australia', 'Africa']);
+            $office->created_at = $fake->date($format = 'Y-m-d', $max = 'now');
+            $office->updated_at = $fake->date($format = 'Y-m-d', $max = 'now');
             $office->save();
         }
     }
