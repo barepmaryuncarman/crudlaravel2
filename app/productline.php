@@ -6,7 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class productline extends Model
 {
-    protected $primaryKey = 'productline';
+    protected $primaryKey = 'productLine';
 
     protected $fillable = array("textDescription","htmlDescription","image");
+
+    public function product(){
+    	return $this->hasMany(product::class,'productLine','productLine');
+    }     
 }
