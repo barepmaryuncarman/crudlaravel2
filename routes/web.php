@@ -26,26 +26,3 @@ Route::get('/orders', function () {
 Route::get('/customers', function () {
     return view('pages.customers');
 });
-
-Route::get('/tes-relation-customer-order', function () {
-	//many
-    $dataCustomer = App\customer::with('order')->orderBy('customerNumber')->get();
-    foreach ($dataCustomer as $valueCustomer) {
-        echo "customerNumber : ".$valueCustomer->customerNumber."<br>"; 
-        echo "customerFirstName : ".$valueCustomer->customerFirstName."<br>";
-        echo "orderDate : <br><ul>";
-        foreach ($valueCustomer->order as $valueCustomerOrder){
-            echo "<li>".$valueCustomerOrder->orderDate."</li>";
-        }
-        echo "</ul>";
-    }
-    echo "<hr>";
-    //one
-    $dataOrder = App\order::with('customer')->orderBy('customerNumber')->get();
-    foreach ($dataOrder as $valueOrder) {
-        echo "orderDate : ".$valueOrder->orderDate."<br>"; 
-        echo "customerNumber : ".$valueOrder->customerNumber."<br>";
-        echo "customerFirstName : ".$valueOrder->customer->customerFirstName."<br>";
-    }   
-    echo "<hr>";  
-});

@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Customer;
+use App\customer;
+use App\payment;
+use Faker\Factory;
 
 class payments_seeder extends Seeder
 {
@@ -12,20 +14,18 @@ class payments_seeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker\Factory::create();
+        $faker = Factory::create();
         $limit = 10;
-
-        $data = Customer::get()->pluck('customerNumber')->toArray();
-
+        $data = customer::get()->pluck('customerNumber')->toArray();
         for($i = 1; $i <= $limit; $i++){
-            DB::table('payments')->insert([
-                //customerNumber dikasih unique(),
-                //soalnya di foto tabel relasinya [customers 1:1 payments]
-                //gajelas payment apaan
-                'customerNumber' => $faker->unique()->randomElement($data),
-                'paymentDate'    => $faker->dateTime(),
-                'amount'         => $faker->randomNumber(6)
-            ]);
+            $payment = new payment;
+            //customerNumber dikasih unique(),
+            //soalnya di foto tabel relasinya [customers 1:1 payments]
+            //gajelas payment apaan
+            $payment->customerNumber = $faker->unique()->randomElement($data);
+            $payment->paymentDate = $faker->dateTime();
+            $payment->amount = $faker->randomNumber(6);
+            $payment->save();
         }
     }
 }

@@ -23,7 +23,7 @@ class CreateEmployeesTable extends Migration
             $table->foreign('officeCode')->references('officeCode')->on('offices');
             $table->integer('reportsTo')->unsigned()->nullable();
             $table->foreign('reportsTo')->references('employeeNumber')->on('employees');
-            $table->string('jobTitle',50);
+            $table->string('jobTitle');
             $table->timestamps();
             $table->softDeletes();
         });

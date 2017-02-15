@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\office;
+use Faker\Factory;
 
 class offices_seeder extends Seeder
 {
@@ -11,24 +13,19 @@ class offices_seeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker\Factory::create();
+        $faker = Factory::create();
         $limit = 10;
-
-        //kalau error :
-        //ganti tipe data `postalCode` jd string/varchar, soalnya dr Faker ada postal code yg bawa dash/strip (ex = 1234-5678)
-        //ganti panjang tipe data `phone` jd >20, soalnya dr Faker ada beberapa phone number yg panjangnya lebih dr 20
-
         for($i = 1; $i <= $limit; $i++){
-            DB::table('offices')->insert([
-                'city'         => $faker->city,
-                'phone'        => $faker->phoneNumber,
-                'addressLine1' => $faker->streetAddress,
-                'addressLine2' => $faker->secondaryAddress,
-                'state'        => $faker->state,
-                'country'      => $faker->country,
-                'postalCode'   => $faker->postcode,
-                'territory'    => $faker->randomElement($array = ['Asia', 'Europe', 'North America', 'South America', 'Australia', 'Africa'])
-            ]);
+            $office = new office;
+            $office->city = $faker->city;
+            $office->phone = $faker->e164PhoneNumber;
+            $office->addressLine1 = $faker->streetAddress;
+            $office->addressLine2 = $faker->secondaryAddress;
+            $office->state = $faker->state;
+            $office->country = $faker->country;
+            $office->postalCode = $faker->postcode;
+            $office->territory = $faker->randomElement($array = ['Asia', 'Europe', 'North America', 'South America', 'Australia', 'Africa']);
+            $office->save();
         }
     }
 }

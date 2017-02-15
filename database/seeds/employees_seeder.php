@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Office;
-use App\Employee;
+use App\office;
+use App\employee;
+use Faker\Factory;
 
 class employees_seeder extends Seeder
 {
@@ -13,33 +14,25 @@ class employees_seeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker\Factory::create();
+        $faker = Factory::create();
         $limit = 10;
-
-        $office = Office::get()->pluck('officeCode')->toArray();        
-
-        //kalau error :
-        //ganti panjang tipe data `extension` jd >20, soalnya dr Faker ada beberapa phone number yg panjangnya lebih dr 20
-
+        $office = office::get()->pluck('officeCode')->toArray();        
         for($i = 1; $i <= $limit; $i++){
-            DB::table('employees')->insert([
-                'lastName'   => $faker->firstName,
-                'firstName'  => $faker->lastName,
-                'extension'  => $faker->phoneNumber,
-                'email'      => $faker->email,
-                'officeCode' => $faker->randomElement($office),
-                'jobTitle'   => $faker->jobTitle
-            ]);
+            $employee = new employee;
+            $employee->lastName = $faker->firstName;
+            $employee->firstName = $faker->lastName;
+            $employee->extension = $faker->e164PhoneNumber;
+            $employee->email = $faker->email;
+            $employee->officeCode = $faker->randomElement($office);
+            $employee->jobTitle = $faker->jobTitle;
+            $employee->save();
         }
 
-        //lolzz tar dilanjut
-        //buat di set di reportsTo
-        /*$employee = Employee::get()->pluck('employeeNumber')->toArray();
-
-        for($i = 1; $i <= $limit; $i++){
-            DB::table('employees')->update([
-                'reportsTo'  => $faker->randomElement($employee)
-            ]);
-        }*/
+        $employee = employee::get()->pluck('employeeNumber')->toArray();
+        for($i = 0; $i < count($employee); $i++){
+            $employeeCek = employee::find($employee[$i]);
+            $employeeCek->reportsTo = $faker->randomElement($employee);
+            $employeeCek->save();
+        }
     }
 }

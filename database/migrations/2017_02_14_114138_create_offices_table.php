@@ -21,7 +21,7 @@ class CreateOfficesTable extends Migration
             $table->string('addressLine2');
             $table->string('state',50);
             $table->string('country',50);
-            $table->integer('postalCode');
+            $table->string('postalCode');
             $table->string('territory');
             $table->timestamps();
             $table->softDeletes();

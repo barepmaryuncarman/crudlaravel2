@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Order;
-use App\Customer;
+use App\order;
+use App\customer;
+use App\orderdetail;
+use Faker\Factory;
 
 class orderdetails_seeder extends Seeder
 {
@@ -13,20 +15,18 @@ class orderdetails_seeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker\Factory::create();
+        $faker = Factory::create();
         $limit = 50;
-
-        $order = Order::get()->pluck('orderNumber')->toArray();
-        $customer = Customer::get()->pluck('customerNumber')->toArray();
-
+        $order = order::get()->pluck('orderNumber')->toArray();
+        $customer = customer::get()->pluck('customerNumber')->toArray();
         for($i = 1; $i <= $limit; $i++){
-            DB::table('orderdetails')->insert([
-                'orderNumber'     => $faker->randomElement($order),
-                'productCode'     => $faker->randomElement($customer),
-                'quantityOrdered' => $faker->randomNumber(2),
-                'priceEach'       => $faker->randomNumber(5),
-                'orderLineNumber' => $faker->randomNumber(9)
-            ]);
+            $orderdetail = new orderdetail;
+            $orderdetail->orderNumber = $faker->randomElement($order);
+            $orderdetail->productCode = $faker->randomElement($customer);
+            $orderdetail->quantityordered = $faker->randomNumber(2);
+            $orderdetail->priceEach = $faker->randomNumber(5);
+            $orderdetail->orderLineNumber = $faker->randomNumber(9);
+            $orderdetail->save();
         }
     }
 }
