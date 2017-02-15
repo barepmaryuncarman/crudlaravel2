@@ -10,6 +10,10 @@ class product extends Model
 
     protected $fillable = array("productName","productLine","productScale","productVendor","productDescription","quantityInStock","buyPrice","MSRP");
 
+	public function setProductNameAttribute($value){
+		$this->attributes['productName'] = ucfirst($value);
+	}
+
 	public function productline(){
 		return $this->belongsTo(productline::class, 'productLine');
 	}   

@@ -24,11 +24,11 @@ Username
 <section class="content-header">
 	<h1>
 		Sistem MLM
-	<small>Product</small>
+	<small>Products</small>
 	</h1>
 	<ol class="breadcrumb">
 		<li><a href="#"><i class="fa fa-home"></i>Sistem MLM</a></li>
-		<li><a href="#"><i class="fa fa-users"></i>Product</a></li>
+		<li><a href="#"><i class="fa fa-users"></i>Products</a></li>
 	</ol>
 </section>
 <section class="content">
@@ -211,7 +211,7 @@ Username
 					<button class="btn btn-sm btn-primary tambah-form" data-toggle="modal" data-target="#mymodaladd"><i class="fa fa-plus"></i>&nbsp;Add</button>
 				</div>
                 <div class="box-body">
-					<table id="tabel_data_produk" class="table table-bordered table-striped">
+					<table id="tabel_data_product" class="table table-bordered table-striped">
 						<thead>
 							<tr>
 								<th>No</th>
@@ -246,7 +246,7 @@ Username
 </section>
 <script type="text/javascript">
 	//Inisialisasi datatables
-	var t = $('#tabel_data_produk').DataTable({
+	var t = $('#tabel_data_product').DataTable({
 		      "scrollX": "140%",
 			  "rowCallback": function( row, data, index ) {
 			  	$('td:eq(0)', row).text(data[0]+1);
@@ -451,6 +451,11 @@ Username
 	  		t.order( [ 0, 'asc' ] ).draw(false);
 	  		//isi datatables
   			refresh_tabel();
+		});
+
+  		//ubah image saat add image diubah
+		$('input[name="add_image"]').keyup(function(){
+	        $('#add_showImage').attr('src',$('input[name="add_image"]').val());
 		});
 
 		//aksi untuk tambah data product line

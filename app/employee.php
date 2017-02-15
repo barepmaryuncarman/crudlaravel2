@@ -18,11 +18,13 @@ class employee extends Model
 		return $this->belongsTo(office::class,'officeCode');
 	}
 
-	public function employeeLeader(){
-		return $this->hasMany(employee::class,'employeeNumber','employeeNumber');
-	}	        
+    public function reportsto()
+    {
+        return $this->belongsTo(employee::class, 'employeeNumber');
+    }
 
-	public function employee(){
-		return $this->belongsTo(employee::class,'employeeNumber');
-	}	        	
+    public function leader()
+    {
+        return $this->hasMany(employee::class, 'employeeNumber', 'reportsTo');
+    }	        	
 }

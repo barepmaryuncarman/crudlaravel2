@@ -71,7 +71,9 @@ Route::group(['prefix'=>'employees'],function(){
     	return view('pages.employees');
 	});
 	
-	Route::put('/select',function () {});
+	Route::put('/select',function () {
+		return App\employee::with('office')->with('leader')->get()->toJson();
+	});
 	
 	Route::post('/store',function () {});
 	
